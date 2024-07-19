@@ -10,89 +10,89 @@ import { chatValue2RuntimePrompt } from '@fastgpt/global/core/chat/adapt';
     可以根据上下文，消除指代性问题以及扩展问题，利于检索。
 */
 
-const defaultPrompt = `作为一个向量检索助手，你的任务是结合历史记录，从不同角度，为“原问题”生成个不同版本的“检索词”，从而提高向量检索的语义丰富度，提高向量检索的精度。生成的问题要求指向对象清晰明确，并与“原问题语言相同”。例如：
-历史记录: 
-"""
-"""
-原问题: 介绍下剧情。
-检索词: ["介绍下故事的背景。","故事的主题是什么？","介绍下故事的主要人物。"]
+const defaultPrompt = `As a vector retrieval assistant, your task is to generate a different version of the “search term” for the “original question” from different perspectives, so as to improve the semantic richness of the vector retrieval and the accuracy of the vector retrieval. The generated question should point to a clear object and be in the same language as the original question. For example:
+History. 
+“"”
+““””
+Original question: Introduce the plot.
+Search terms: ["Introduce the background of the story.” , “What is the theme of the story?” , “Introduce the main characters of the story.”]
 ----------------
-历史记录: 
-"""
-Q: 对话背景。
-A: 当前对话是关于 Nginx 的介绍和使用等。
-"""
-原问题: 怎么下载
-检索词: ["Nginx 如何下载？","下载 Nginx 需要什么条件？","有哪些渠道可以下载 Nginx？"]
+History. 
+“"”
+Q: Context of the conversation.
+A: The current dialog is about Nginx introduction, usage etc.
+“"”
+Original question: How to download
+Search terms: ["How to download Nginx?” , “What do I need to download Nginx?” , “What are the channels to download Nginx?”]
 ----------------
-历史记录: 
-"""
-Q: 对话背景。
-A: 当前对话是关于 Nginx 的介绍和使用等。
-Q: 报错 "no connection"
-A: 报错"no connection"可能是因为……
-"""
-原问题: 怎么解决
-检索词: ["Nginx报错"no connection"如何解决？","造成'no connection'报错的原因。","Nginx提示'no connection'，要怎么办？"]
+History. 
+“"”
+Q: Context of the conversation.
+A: The current conversation is about Nginx and how to use it.
+Q: Error “no connection”
+A: The error “no connection” may be caused by ......
+“"”
+Original question: How to solve
+Search term: [“How to fix Nginx error ‘no connection’?”], “How to fix Nginx error ‘no connection’? , “Causes of ‘no connection’ error.” , “Nginx is reporting ‘no connection’, what should I do?”]
 ----------------
-历史记录: 
-"""
-Q: 护产假多少天?
-A: 护产假的天数根据员工所在的城市而定。请提供您所在的城市，以便我回答您的问题。
-"""
-原问题: 沈阳
-检索词: ["沈阳的护产假多少天？","沈阳的护产假政策。","沈阳的护产假标准。"]
+History. 
+“"”
+Q: How many days is the maternity leave?
+A: The number of days of maternity leave depends on the city of the employee. Please provide your city so I can answer your question.
+“"”
+Original Question: Shenyang
+Search Terms: ["How many days of maternity leave is granted in Shenyang?” , “Shenyang's Nursing Maternity Leave Policy.” , “Shenyang's Nursing Maternity Leave Standards.”"]
 ----------------
-历史记录: 
-"""
-Q: 作者是谁？
-A: FastGPT 的作者是 labring。
-"""
-原问题: Tell me about him
-检索词: ["Introduce labring, the author of FastGPT." ," Background information on author labring." "," Why does labring do FastGPT?"]
+History. 
+“"”
+Q: Who is the author?
+A: The author of FastGPT is labring.
+“"”
+Original question: Tell me about him
+Search terms: [“Introduce labring, the author of FastGPT.”,“ Background information on author labring.” “,” Why does labring do FastGPT?"]
 ----------------
-历史记录:
-"""
-Q: 对话背景。
-A: 关于 FatGPT 的介绍和使用等问题。
-"""
-原问题: 你好。
-检索词: ["你好"]
+History.
+“"”
+Q: Conversation background.
+A: Questions about the introduction and use of FatGPT.
+“"”
+Original question: Hello.
+Search term: [“Hello”]
 ----------------
-历史记录:
-"""
-Q: FastGPT 如何收费？
-A: FastGPT 收费可以参考……
-"""
-原问题: 你知道 laf 么？
-检索词: ["laf 的官网地址是多少？","laf 的使用教程。","laf 有什么特点和优势。"]
+History.
+“"”
+Q: How does FastGPT charge?
+A: FastGPT charges can be found at ......
+“"”
+Original question: Do you know laf?
+Search term: [“What is laf's official website address?”] , “laf Tutorials. , “Tutorial on how to use laf.” , “What are the features and advantages of laf.”]
 ----------------
-历史记录:
-"""
-Q: FastGPT 的优势
-A: 1. 开源
-   2. 简便
-   3. 扩展性强
-"""
-原问题: 介绍下第2点。
-检索词: ["介绍下 FastGPT 简便的优势", "从哪些方面，可以体现出 FastGPT 的简便"]。
+History.
+“"”
+Q: Advantages of FastGPT
+A: 1. open source
+   2. Simplicity
+   3. Extensible
+“"”
+Original question: Introduce point 2.
+Search terms: [“Introduce the advantages of FastGPT's simplicity”, “In what ways can FastGPT's simplicity be demonstrated”].
 ----------------
-历史记录:
-"""
-Q: 什么是 FastGPT？
-A: FastGPT 是一个 RAG 平台。
-Q: 什么是 Laf？
-A: Laf 是一个云函数开发平台。
-"""
-原问题: 它们有什么关系？
-检索词: ["FastGPT和Laf有什么关系？","介绍下FastGPT","介绍下Laf"]
+History.
+“"”
+Q: What is FastGPT?
+A: FastGPT is a RAG platform.
+Q: What is Laf?
+A: Laf is a cloud function development platform.
+“"”
+Original Question: How are they related?
+Search Terms: [“What is the relationship between FastGPT and Laf?”], “Introducing FastGPT. , “Introducing FastGPT”, “Introducing Laf”]
 ----------------
-历史记录:
-"""
+History.
+“"”
 {{histories}}
-"""
-原问题: {{query}}
-检索词: `;
+“"”
+Original question: {{query}}
+Search terms: {{histories}} `;
 
 export const queryExtension = async ({
   chatBg,
@@ -111,7 +111,7 @@ export const queryExtension = async ({
   tokens: number;
 }> => {
   const systemFewShot = chatBg
-    ? `Q: 对话背景。
+    ? `Q: Conversation context.
 A: ${chatBg}
 `
     : '';

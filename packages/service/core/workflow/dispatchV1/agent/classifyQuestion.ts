@@ -125,13 +125,11 @@ const getFunctionCallSchema = async ({
           type: ChatItemValueTypeEnum.text,
           text: {
             content: systemPrompt
-              ? `<背景知识>
-    ${systemPrompt}
-    </背景知识>
+              ? `<BackgroundKnowledge>
+  ${systemPrompt}
+</backgroundKnowledge>
 
-    问题: "${userChatInput}"
-          `
-              : userChatInput
+Question: "${userChatInput}"` : userChatInput
           }
         }
       ]
@@ -147,15 +145,15 @@ const getFunctionCallSchema = async ({
   // function body
   const agentFunction = {
     name: agentFunName,
-    description: '结合对话记录及背景知识，对问题进行分类，并返回对应的类型字段',
+    description: 'Combine conversation transcripts and background knowledge to categorize questions and return corresponding type fields',
     parameters: {
       type: 'object',
       properties: {
         type: {
           type: 'string',
-          description: `问题类型。下面是几种可选的问题类型: ${agents
-            .map((item) => `${item.value}，返回：'${item.key}'`)
-            .join('；')}`,
+          description: `Question Types. Here are a few optional question types: ${agents
+            .map((item) => `${item.value}, return: '${item.key}'`)
+            .join(';')}`,
           enum: agents.map((item) => item.key)
         }
       },

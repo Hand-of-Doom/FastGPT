@@ -101,7 +101,7 @@ const completions = async ({
             content: replaceVariable(cqModel.customCQPrompt || Prompt_CQJson, {
               systemPrompt: systemPrompt || 'null',
               typeList: agents
-                .map((item) => `{"类型ID":"${item.key}", "问题类型":"${item.value}"}`)
+                .map((item) => `{"typeId": "${item.key}", "questionType": "${item.value}"}`)
                 .join('------'),
               history: histories
                 .map((item) => `${item.obj}:${chatValue2RuntimePrompt(item.value).text}`)

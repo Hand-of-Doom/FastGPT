@@ -154,14 +154,14 @@ const getFunctionCallSchema = async ({
         {
           type: ChatItemValueTypeEnum.text,
           text: {
-            content: `我正在执行一个函数，需要你提供一些参数，请以 JSON 字符串格式返回这些参数，要求：
+            content: `I am executing a function and need you to provide some parameters, please return these parameters in JSON string format, required:
 """
 ${description ? `- ${description}` : ''}
-- 不是每个参数都是必须生成的，如果没有合适的参数值，不要生成该参数，或返回空字符串。
-- 需要结合前面的对话内容，一起生成合适的参数。
+- Not every parameter is required to be generated, if there is no suitable value for the parameter, do not generate the parameter, or return the empty string.
+- You need to generate the appropriate parameter together with the content of the previous dialog.
 """
 
-本次输入内容: ${content}
+This input content: ${content}
             `
           }
         }
@@ -191,7 +191,7 @@ ${description ? `- ${description}` : ''}
   // function body
   const agentFunction = {
     name: agentFunName,
-    description: '需要执行的函数',
+    description: 'Functions to be executed',
     parameters: {
       type: 'object',
       properties,
